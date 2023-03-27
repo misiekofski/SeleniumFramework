@@ -1,6 +1,10 @@
 package tests;
 
+import driver.DriverFactory;
+import driver.DriverManager;
 import driver.DriverSetup;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -8,7 +12,13 @@ import org.openqa.selenium.WebElement;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SeleniumTest {
+public class SeleniumTestWithFactory {
+    static DriverManager manager;
+    @BeforeAll
+    static void setUp(){
+        manager = DriverFactory.valueOf("CHROME").getDriverManager();
+    }
+
     @Test
     void shouldLogInSuccessfully() {
         // preconditions
@@ -17,10 +27,8 @@ public class SeleniumTest {
         var password = "secret_sauce";
 
 
-        // Steps
-
-        // initialize browser (Chrome here)
-        WebDriver driver = DriverSetup.getDriver(); // using DriverSetup and BrowserConfig class
+        // using ChromeDriverManager, DriverFactory, DriverManager classes
+        WebDriver driver = manager.getDriver();
         // Login to site
         driver.get(url);
         // find elements and enter user/pass into login form
@@ -41,4 +49,3 @@ public class SeleniumTest {
         driver.quit();
     }
 }
-
